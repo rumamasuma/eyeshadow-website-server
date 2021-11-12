@@ -57,11 +57,11 @@ app.get('/orders', async(req, res)=>{
 //   const orderProduct = await cursor.toArray();
 //   res.json(orderProduct);
 // })
-app.get("/orders/:email", async (req, res) => {
-  console.log(req.params.email);
-  const result = await ordersCollection.find({ email: req.params.email }).toArray();
-  res.send(result);
-});
+// app.get("/orders/:email", async (req, res) => {
+//   console.log(req.params.email);
+//   const result = await ordersCollection.find({ email: req.params.email }).toArray();
+//   res.send(result);
+// });
 
 // order send by POST API
  app.post('/orders', async(req, res) =>{
@@ -71,6 +71,20 @@ app.get("/orders/:email", async (req, res) => {
   // console.log(result);
    res.json(result);
  })
+ // DELETE API
+app.delete('/orders/:id', async(req, res) =>{
+  const id = req.params.id;
+  const query = {_id : ObjectId(id)};
+  console.log(query);
+  const result = await ordersCollection.deleteOne(query);
+  res.json(result);
+})
+// review POST API
+app.post('/reviews' , async(req, res)=>{
+  const review = req.body;
+  const result = await reviewsCollection.insertOne(review);
+  res.json(result);
+})
 }
 finally{
     // await client.close();
