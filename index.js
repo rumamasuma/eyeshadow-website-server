@@ -85,6 +85,43 @@ app.post('/reviews' , async(req, res)=>{
   const result = await reviewsCollection.insertOne(review);
   res.json(result);
 })
+// user admin
+app.get('/users/:email' , async(req,res)=>{
+  const email = req.params.email;
+  const query = {email : email};
+  const user = await usersCollection.findOne(query);
+  let isAdmin = false;
+  if(user?.role === 'admin'){
+    isAdmin= true;
+  }
+  res.json({admin : isAdmin});
+})
+// user send to db by POST api
+app.post('/users' , async(req, res)=>{
+  const user = req.body;
+  const result = await usersCollection.insertOne(user);
+  res.json(result);
+})
+// user update & insert(upsert)
+app.put('/users', async(req, res)=>{
+  const user = req.body;
+  const filter = {email : user.email};
+  const options = { upsert: true };
+  const updateDoc = {$set :user};
+  const result = await usersCollection.updateOne(filter, updateDoc, options);
+  res.json(result);
+})
+// make admin 
+app.put('/users/admin' , async(req,res)=>{
+  const user= req.body;
+  console.log('put user', user);
+  const filter = {email : user.email};
+  const updateDoc = {$set : {role : 'admin'}};
+  const result = await usersCollection.updateOne(filter, updateDoc);
+  res.json(result);
+})
+
+
 }
 finally{
     // await client.close();
@@ -92,9 +129,6 @@ finally{
 
 }
 run().catch(console.dir);
-
-
-
 
 app.get('/', (req, res) => {
   res.send('Hello From Diva Eyeshadow Palette!')
