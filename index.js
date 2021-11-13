@@ -32,7 +32,7 @@ try{
         const products = await cursor.toArray();
         res.send(products);
     })
-    // GET Single order
+    // GET Single product
 app.get('/products/:id' , async(req, res)=>{
     const id = req.params.id;
     // console.log('geeting single id');
@@ -41,6 +41,13 @@ app.get('/products/:id' , async(req, res)=>{
     res.json(product);
 
 })
+// POST product
+app.post('/products' , async(req, res)=>{
+  const product = req.body;
+  const result= await productCollection.insertOne(product);
+  res.json(result);
+})
+
 // order get by GET API
 app.get('/orders', async(req, res)=>{
    const cursor = ordersCollection.find({});
@@ -48,25 +55,11 @@ app.get('/orders', async(req, res)=>{
    res.json(orders);
 })
 
-// get single order by email
-// app.get('/orders', async(req, res) => {
-//   const email = req.query.email; 
-//   const query = {email: email};
-//   console.log(query);
-//   const cursor = ordersCollection.find(query);
-//   const orderProduct = await cursor.toArray();
-//   res.json(orderProduct);
-// })
-// app.get("/orders/:email", async (req, res) => {
-//   console.log(req.params.email);
-//   const result = await ordersCollection.find({ email: req.params.email }).toArray();
-//   res.send(result);
-// });
+
 
 // order send by POST API
  app.post('/orders', async(req, res) =>{
    const order = req.body;
-  //  console.log(order);
   const result = await ordersCollection.insertOne(order);
   // console.log(result);
    res.json(result);
