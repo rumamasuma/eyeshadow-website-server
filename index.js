@@ -62,8 +62,6 @@ app.get('/orders', async(req, res)=>{
    res.json(orders);
 })
 
-
-
 // order send by POST API
  app.post('/orders', async(req, res) =>{
    const order = req.body;
@@ -78,6 +76,12 @@ app.delete('/orders/:id', async(req, res) =>{
   // console.log(query);
   const result = await ordersCollection.deleteOne(query);
   res.json(result);
+})
+// review GET API
+app.get('/reviews', async(req, res)=>{
+  const cursor = reviewsCollection.find({});
+  const review = await cursor.toArray();
+  res.json(review);
 })
 // review POST API
 app.post('/reviews' , async(req, res)=>{
