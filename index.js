@@ -47,7 +47,14 @@ app.post('/products' , async(req, res)=>{
   const result= await productCollection.insertOne(product);
   res.json(result);
 })
-
+// delete product
+app.delete('/products/:id', async(req, res)=>{
+  const id = req.params.id;
+  const query = {_id : ObjectId(id)};
+  console.log(query);
+  const result = await productCollection.deleteOne(query);
+  res.json(result);
+})
 // order get by GET API
 app.get('/orders', async(req, res)=>{
    const cursor = ordersCollection.find({});
@@ -68,7 +75,7 @@ app.get('/orders', async(req, res)=>{
 app.delete('/orders/:id', async(req, res) =>{
   const id = req.params.id;
   const query = {_id : ObjectId(id)};
-  console.log(query);
+  // console.log(query);
   const result = await ordersCollection.deleteOne(query);
   res.json(result);
 })
